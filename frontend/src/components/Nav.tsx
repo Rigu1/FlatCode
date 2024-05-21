@@ -1,6 +1,6 @@
 // src/components/Header.tsx
 import React from 'react';
-import { StyledNav } from '@components/Nav/StyledNav';
+import { StyledNav } from '@styles/styled-component/StyledNav';
 
 const Nav: React.FC = () => {
   return (
