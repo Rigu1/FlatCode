@@ -1,8 +1,10 @@
-import Nav from '@components/Nav';
 import styled from 'styled-components';
 
-export const StyledNav = styled.nav`
-  color: black;
+export const StyledNav = styled.div` 
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 285px;
+  height: 100vh;
+  background-color: #161616;
 `;
-
-export default Nav;

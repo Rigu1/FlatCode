@@ -1,16 +1,14 @@
-import React from 'react';
+import React  from 'react';
 import { ThemeProvider } from 'styled-components';
-import GlobalStyle from '@styles/GlobalStyles';
-import { theme } from '@styles/theme'; 
-import Main from '@components/Main';
-import Nav from '@components/Nav';
+import Home   from '@pages/Home';
+import GlobalStyle  from '@styles/GlobalStyles';
+import theme        from '@styles/theme'; 
 
 const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <Main />
-      <Nav />
+        <Home />
     </ThemeProvider>
   );
 };

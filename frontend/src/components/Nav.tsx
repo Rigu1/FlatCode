@@ -5,7 +5,7 @@ import { StyledNav } from '@styles/styled-component/StyledNav';
 const Nav: React.FC = () => {
   return (
     <StyledNav>
-      <h1>Nav</h1>
+      <p>Nav</p>
     </StyledNav>
   );
 };
