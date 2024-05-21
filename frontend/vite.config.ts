@@ -10,8 +10,11 @@ export default defineConfig({
 		port: 3000,
 	},
 	resolve: {
-		alias: {
-			"@": path.resolve(__dirname, "./src"),
-		},
-	},
+    alias: {
+      '@styles': path.resolve(__dirname, './src/styles'),
+      '@components': path.resolve(__dirname, './src/components'),
+			'@utils': path.resolve(__dirname, './src/utils')
+      // 여기에 다른 별칭도 추가 가능
+    }
+  }
 });
