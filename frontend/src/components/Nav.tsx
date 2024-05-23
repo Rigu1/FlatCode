@@ -1,14 +1,17 @@
 // src/components/Header.tsx
 import React from 'react';
 import ImageComponent from '@components/common/ImageComponent';
-import { StyledNav } from '@styles/styled-component/StyledNav';
+import DashboardList from '@components/nav/DashboardList';
+import { StyledNav } from '@styles/styled-component/component/StyledNav';
+
 
 const Nav: React.FC = () => {
   return (
     <StyledNav>
       <div className="logo">
-        <ImageComponent src="/images/logo_dack.jpeg" alt="Our Company Logo" width="200" height="100"/>
+        <ImageComponent src="/images/logo_dack.png" alt="Our Company Logo"/>
       </div>
+      <DashboardList />
     </StyledNav>
   );
 };

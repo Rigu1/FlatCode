@@ -1,8 +1,8 @@
-import React  from 'react';
+import React from 'react';
 import { ThemeProvider } from 'styled-components';
-import HomePage     from '@pages/HomePage';
-import GlobalStyle  from '@styles/GlobalStyles';
-import theme        from '@styles/theme'; 
+import HomePage from '@pages/HomePage';
+import GlobalStyle from '@styles/styled-component/GlobalStyles';
+import theme from '@styles/styled-component/theme'; 
 
 const App: React.FC = () => {
   return (

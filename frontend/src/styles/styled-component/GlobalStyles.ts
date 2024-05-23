@@ -13,6 +13,10 @@ const GlobalStyle = createGlobalStyle`
     font-family: ${props => props.theme.fonts.heading};
     color: ${props => props.theme.colors.primary};
   }
+  
+  p {
+    margin: 0;
+  }
 
   a {
     color: ${props => props.theme.colors.primary};
