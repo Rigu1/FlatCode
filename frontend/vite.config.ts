@@ -10,12 +10,12 @@ export default defineConfig({
 		port: 3000,
 	},
 	resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
     alias: {
       '@styles': path.resolve(__dirname, './src/styles'),
       '@components': path.resolve(__dirname, './src/components'),
 			'@utils': path.resolve(__dirname, './src/utils'),
-      '@pages': path.resolve(__dirname, './src/pages')
-      // 여기에 다른 별칭도 추가 가능
+      '@pages': path.resolve(__dirname, './src/pages'),
     }
   }
 });

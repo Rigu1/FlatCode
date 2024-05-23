@@ -2,14 +2,14 @@
 import React from 'react';
 import Main   from '@components/Main';
 import Nav    from '@components/Nav';
-import { StyledHome } from '@styles/styled-component/StyledHome';
+import { StyledHomePage } from '@styles/styled-component/StyledHomePage';
 
 const Home: React.FC = () => {
   return (
-    <StyledHome>
-      <Main />
+    <StyledHomePage>
       <Nav />
-    </StyledHome>
+      <Main />
+    </StyledHomePage>
   );
 };
 
