@@ -1,6 +1,6 @@
 import React from 'react';
 import ImageComponent from '@components/common/ImageComponent';
-import { StyledAddDashboardButton } from '@styles/styled-component/component/nav/StyledAddDashboardButton';
+import { StyledAddDashboardButton } from '@styles/styled-component/component/dashboard/StyledAddDashboardButton';
 
 interface AddDashboardButtonProps {
   onClick: () => void;

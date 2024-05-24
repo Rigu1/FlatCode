@@ -5,10 +5,10 @@ export const StyledDashboardList = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 255px;
-  padding: 15px;
+  padding: 1em;
 
   .line {
-    margin: 5px 0;
+    margin: 0.2em 0;
     border-top: 1px solid #333333;
   }
 `;

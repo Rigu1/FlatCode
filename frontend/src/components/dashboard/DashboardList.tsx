@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Dashboard from '@components/nav/DashboradItem';
-import AddDashboardButton from '@components/nav/AddDashboardButton';
-import { StyledDashboardList } from '@styles/styled-component/component/nav/StyledDashboardList';
+import Dashboard from '@components/dashboard/DashboradItem';
+import AddDashboardButton from '@components/dashboard/AddDashboardButton';
+import { StyledDashboardList } from '@styles/styled-component/component/dashboard/StyledDashboardList';
 
 const initialDashboards = [
   { id: 1, imagePath: '/images/dashboard_first.svg' },
