@@ -5,6 +5,8 @@ import { StyledBoardSet } from '@styles/styled-component/component/board/StyledB
 
 const initialBoard = [
   { id: 1},
+  { id: 2},
+  { id: 3},
 ];
 
 const BoardSet: React.FC = () => {

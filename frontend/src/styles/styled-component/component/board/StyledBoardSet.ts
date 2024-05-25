@@ -8,11 +8,12 @@ export const StyledBoardSet = styled.div`
   .mainHead {
     display: flex;
     justify-content: space-between;
-    margin: 0.5em 0;
+    margin: 0 0 1em 0;
   }
 
   .content {
     display: flex;
+    flex-wrap: wrap
     flex-direction: row;
     gap: 1.5em;
     width: 75vw;
