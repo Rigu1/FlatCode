@@ -1,10 +1,10 @@
 // src/components/Header.tsx
-import React from 'react';
+import { FC } from 'react';
 import Main from '@components/Main';
 import Nav from '@components/Nav';
 import { StyledHomePage } from '@styles/styled-component/page/StyledHomePage';
 
-const Home: React.FC = () => {
+const Home: FC = () => {
   return (
     <StyledHomePage>
       <Nav />
@@ -13,4 +13,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;  
+export default Home;

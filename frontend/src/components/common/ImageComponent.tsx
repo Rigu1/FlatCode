@@ -1,7 +1,7 @@
-import React from 'react';
+import { FC } from 'react';
 import { ImageComponentProps } from '../../types/ImageComponentProps';
 
-const ImageComponent: React.FC<ImageComponentProps> = ({ src, alt, className }) => {
+const ImageComponent: FC<ImageComponentProps> = ({ src, alt, className = '' }) => {
   return (
     <img
       src={src}

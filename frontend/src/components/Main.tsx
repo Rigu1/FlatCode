@@ -1,13 +1,9 @@
 // src/components/Header.tsx
-import React from 'react';
-import BoardSet from '@components/board/BoardSet'
-import { StyledMain } from '@styles/styled-component/component/StyledMain';
+import { FC } from 'react';
 
-const Main: React.FC = () => {
+const Main: FC = () => {
   return (
-    <StyledMain>
-      <BoardSet />
-    </StyledMain>
+    <></>
   );
 };
 

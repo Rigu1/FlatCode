@@ -1,16 +1,9 @@
 // src/components/Header.tsx
-import React from 'react';
-import Setting from '@components/uesr/Setting';
-import User from '@components/uesr/User';
-import { StyledAddress } from '@styles/styled-component/component/StyledAddress';
+import { FC } from 'react';
 
-const Address: React.FC = () => {
+const Address: FC = () => {
   return (
-    <StyledAddress>
-      <Setting />
-      <div className="line"></div>
-      <User />
-    </StyledAddress>
+    <></>
   );
 };
 
