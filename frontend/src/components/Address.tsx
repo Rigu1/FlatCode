@@ -1,9 +1,16 @@
-// src/components/Header.tsx
 import { FC } from 'react';
 
-const Address: FC = () => {
+interface AddressProps {
+  userName: string;
+  userPicturePath: string;
+  userBoardPreset: string;
+}
+
+const Address: FC<AddressProps> = ({ userName, userPicturePath, userBoardPreset }) => {
   return (
-    <></>
+    <div className="Profile-info">
+      <></>
+    </div>
   );
 };
 

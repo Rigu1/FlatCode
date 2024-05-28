@@ -1,15 +1,20 @@
 // src/components/Header.tsx
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import Main from '@components/Main';
 import Nav from '@components/Nav';
-import { StyledHomePage } from '@styles/styled-component/page/StyledHomePage';
 
 const Home: FC = () => {
+  const [mode, setMode] = useState('home');
+
+  const toggleMode = () => {
+    setMode((prevMode: string) => (prevMode === 'home' ? 'edit' : 'home'));
+  };
+
   return (
-    <StyledHomePage>
-      <Nav />
-      <Main />
-    </StyledHomePage>
+    <div>
+      <Nav mode={mode} />
+      <Main mode={mode} toggleMode={toggleMode} />
+    </div>
   );
 };
 
