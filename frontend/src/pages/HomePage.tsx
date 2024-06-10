@@ -1,21 +1,27 @@
-// src/components/Header.tsx
-import { FC, useState } from 'react';
-import Main from '@components/Main';
-import Nav from '@components/Nav';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../app/store';
+import Register from '../components/Register';
+import Login from '../components/Login';
+import Dashboard from '../components/Dashboard';
 
-const Home: FC = () => {
-  const [mode, setMode] = useState('home');
-
-  const toggleMode = () => {
-    setMode((prevMode: string) => (prevMode === 'home' ? 'edit' : 'home'));
-  };
+const HomePage: React.FC = () => {
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated,
+  );
 
   return (
     <div>
-      <Nav mode={mode} />
-      <Main mode={mode} toggleMode={toggleMode} />
+      {isAuthenticated ? (
+        <Dashboard />
+      ) : (
+        <>
+          <Register />
+          <Login />
+        </>
+      )}
     </div>
   );
 };
 
-export default Home;
+export default HomePage;
