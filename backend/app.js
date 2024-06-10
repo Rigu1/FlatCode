@@ -29,11 +29,22 @@ app.use(session({
     store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
 }));
 
+// 인증 미들웨어 정의
+const authenticateUser = (req, res, next) => {
+  if (req.session && req.session.user) {
+    next();
+  } else {
+    res.status(401).json({ error: 'Unauthorized' });
+  }
+};
+
 const authRoutes = require('./routes/authRoutes');
-const chatRoutes = require('./routes/chatRoutes'); // chatRoutes를 불러옴
+const chatRoutes = require('./routes/chatRoutes');
+const todoRoutes = require('./routes/todoRoutes'); // todo 라우트 추가
 
 app.use('/api/auth', authRoutes);
-app.use('/api', chatRoutes); // /api/chat 경로 설정
+app.use('/api', chatRoutes);
+app.use('/api/todos', authenticateUser, todoRoutes); // /api/todos 경로 설정 및 인증 미들웨어 적용
 
 const PORT = process.env.PORT || 5000;
 
