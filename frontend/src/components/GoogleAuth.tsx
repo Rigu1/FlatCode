@@ -8,8 +8,9 @@ const GoogleAuth: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { emails, loading, error } = useSelector(
     (state: RootState) => state.gmail,
-  ); // 상태를 명확히 사용
+  );
   const [authUrl, setAuthUrl] = useState<string>('');
+  const [selectedEmail, setSelectedEmail] = useState<any>(null);
 
   useEffect(() => {
     const fetchAuthUrl = async () => {
@@ -24,26 +25,62 @@ const GoogleAuth: React.FC = () => {
       }
     };
 
-    fetchAuthUrl();
-  }, []);
+    const fetchEmailsOnLoad = async () => {
+      try {
+        await dispatch(fetchEmails());
+      } catch (error) {
+        console.error('Error fetching emails:', error);
+      }
+    };
 
-  const handleFetchEmails = () => {
-    dispatch(fetchEmails());
+    fetchAuthUrl();
+    fetchEmailsOnLoad();
+  }, [dispatch]);
+
+  const handleEmailClick = async (id: string) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/google/emails/${id}`,
+        { withCredentials: true },
+      );
+      setSelectedEmail(response.data);
+      console.log('Fetched email details:', response.data);
+    } catch (error) {
+      console.error('Error fetching email:', error);
+    }
   };
 
   return (
     <div>
-      <h2>Google Authentication</h2>
-      {authUrl && <a href={authUrl}>Authenticate with Google</a>}
-      <button onClick={handleFetchEmails}>Fetch Emails</button>
+      {authUrl && !emails.length && (
+        <a href={authUrl}>Authenticate with Google</a>
+      )}
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
-      {emails.length > 0 && (
+      {!loading && emails.length > 0 && !selectedEmail && (
         <ul>
           {emails.map((email) => (
-            <li key={email.id}>{email.id}</li>
+            <li key={email.id} onClick={() => handleEmailClick(email.id)}>
+              <strong>Subject:</strong> {email.subject} <br />
+            </li>
           ))}
         </ul>
+      )}
+      {selectedEmail && (
+        <div>
+          <h3>Email Details</h3>
+          <p>
+            <strong>Subject:</strong> {selectedEmail.subject}
+          </p>
+          <p>
+            <strong>From:</strong> {selectedEmail.from}
+          </p>
+          <p>
+            <strong>Date:</strong> {selectedEmail.date}
+          </p>
+          <p>{selectedEmail.snippet}</p>
+          <button onClick={() => setSelectedEmail(null)}>Close</button>
+        </div>
       )}
     </div>
   );

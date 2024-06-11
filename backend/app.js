@@ -25,22 +25,21 @@ app.use(express.urlencoded({ extended: true }));
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
-    cookie: { secure: false } // 개발 환경에서는 false, 프로덕션 환경에서는 true로 설정
+    saveUninitialized: true,
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
 }));
 
 const authRoutes = require('./routes/authRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const todoRoutes = require('./routes/todoRoutes');
 const translateRoutes = require('./routes/translateRoutes');
-const googleAuthRoutes = require('./routes/googleAuthRoutes'); // Gmail API 라우트 추가
+const googleAuthRoutes = require('./routes/googleAuthRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/todos', todoRoutes);
 app.use('/api/translate', translateRoutes);
-app.use('/api/google', googleAuthRoutes); // /api/google 경로 설정
+app.use('/api/google', googleAuthRoutes);
 
 const PORT = process.env.PORT || 5000;
 

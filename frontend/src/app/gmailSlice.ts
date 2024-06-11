@@ -1,8 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+export interface Email {
+  id: string;
+  subject: string;
+  from: string;
+  snippet: string;
+  date: string;
+}
+
 interface GmailState {
-  emails: { id: string }[]; // 이메일 형식을 명확히 정의합니다.
+  emails: Email[];
   loading: boolean;
   error: string | null;
 }
@@ -19,9 +27,11 @@ export const fetchEmails = createAsyncThunk(
     try {
       const response = await axios.get(
         'http://localhost:5000/api/google/emails',
-        { withCredentials: true },
+        {
+          withCredentials: true,
+        },
       );
-      return response.data.messages;
+      return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
@@ -36,11 +46,11 @@ const gmailSlice = createSlice({
     builder
       .addCase(fetchEmails.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(fetchEmails.fulfilled, (state, action) => {
-        state.loading = false;
         state.emails = action.payload;
+        state.loading = false;
+        state.error = null;
       })
       .addCase(fetchEmails.rejected, (state, action) => {
         state.loading = false;
