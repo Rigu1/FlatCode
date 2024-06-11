@@ -1,13 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './authSlice';
 import chatReducer from './chatSlice';
-import todoReducer from './todoSlice'; // todo 슬라이스 추가
+import todoReducer from './todoSlice';
+import translateReducer from './translateSlice'; // 번역 슬라이스 추가
+import gmailReducer from './gmailSlice';
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
     chat: chatReducer,
-    todos: todoReducer, // 스토어에 todo 슬라이스 추가
+    todos: todoReducer,
+    translate: translateReducer, // 스토어에 번역 슬라이스 추가
+    gmail: gmailReducer,
   },
 });
 

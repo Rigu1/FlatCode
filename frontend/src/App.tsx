@@ -4,6 +4,8 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Chat from './components/Chat';
 import TodoList from './components/TodoList';
+import Translate from './components/Translate';
+import GoogleAuth from './components/GoogleAuth'; // GoogleAuth 컴포넌트 추가
 
 const App: React.FC = () => {
   return (
@@ -13,6 +15,9 @@ const App: React.FC = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/todos" element={<TodoList />} />
+        <Route path="/translate" element={<Translate />} />
+        <Route path="/google-auth" element={<GoogleAuth />} />{' '}
+        {/* GoogleAuth 라우트 추가 */}
       </Routes>
     </Router>
   );

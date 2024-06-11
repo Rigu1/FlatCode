@@ -25,26 +25,22 @@ app.use(express.urlencoded({ extended: true }));
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+    cookie: { secure: false } // 개발 환경에서는 false, 프로덕션 환경에서는 true로 설정
 }));
-
-// 인증 미들웨어 정의
-const authenticateUser = (req, res, next) => {
-  if (req.session && req.session.user) {
-    next();
-  } else {
-    res.status(401).json({ error: 'Unauthorized' });
-  }
-};
 
 const authRoutes = require('./routes/authRoutes');
 const chatRoutes = require('./routes/chatRoutes');
-const todoRoutes = require('./routes/todoRoutes'); // todo 라우트 추가
+const todoRoutes = require('./routes/todoRoutes');
+const translateRoutes = require('./routes/translateRoutes');
+const googleAuthRoutes = require('./routes/googleAuthRoutes'); // Gmail API 라우트 추가
 
 app.use('/api/auth', authRoutes);
-app.use('/api', chatRoutes);
-app.use('/api/todos', authenticateUser, todoRoutes); // /api/todos 경로 설정 및 인증 미들웨어 적용
+app.use('/api/chat', chatRoutes);
+app.use('/api/todos', todoRoutes);
+app.use('/api/translate', translateRoutes);
+app.use('/api/google', googleAuthRoutes); // /api/google 경로 설정
 
 const PORT = process.env.PORT || 5000;
 
