@@ -1,23 +1,44 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './components/Login';
-import Register from './components/Register';
-import Chat from './components/Chat';
-import TodoList from './components/TodoList';
-import Translate from './components/Translate';
-import GoogleAuth from './components/GoogleAuth';
+import React, { useEffect, useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from 'react-router-dom';
+import LoginPage from '@pages/LoginPage';
+import HomePage from '@pages/HomePage';
+import axios from 'axios';
 
 const App: React.FC = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await axios.get(
+          'http://localhost:5000/api/auth/check-auth',
+          { withCredentials: true },
+        );
+        setIsAuthenticated(response.data.isAuthenticated);
+      } catch (err) {
+        setIsAuthenticated(false);
+      }
+    };
+    checkAuth();
+  }, []);
+
+  if (isAuthenticated === null) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/chat" element={<Chat />} />
-        <Route path="/todos" element={<TodoList />} />
-        <Route path="/translate" element={<Translate />} />
-        <Route path="/google-auth" element={<GoogleAuth />} />{' '}
-        {/* EmailList 라우트 추가 */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/"
+          element={isAuthenticated ? <HomePage /> : <Navigate to="/login" />}
+        />
       </Routes>
     </Router>
   );

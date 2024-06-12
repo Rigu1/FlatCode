@@ -1,7 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../app/store';
-import { fetchTodos, addTodo, updateTodo } from '../app/todoSlice';
+import { fetchTodos, addTodo, updateTodo, deleteTodo } from '../app/todoSlice';
+import styled from 'styled-components';
+
+const TodoListContainer = styled.div`
+  padding: 20px;
+`;
+
+const TodoItem = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+`;
+
+const TodoInput = styled.input`
+  flex-grow: 1;
+  padding: 8px;
+`;
+
+const TodoButton = styled.button`
+  padding: 8px;
+  margin-left: 10px;
+`;
 
 const TodoList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -23,6 +45,10 @@ const TodoList: React.FC = () => {
     dispatch(updateTodo({ id, text, completed }));
   };
 
+  const handleDeleteTodo = (id: string) => {
+    dispatch(deleteTodo(id));
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleAddTodo();
@@ -30,12 +56,12 @@ const TodoList: React.FC = () => {
   };
 
   return (
-    <div className="todo-list">
+    <TodoListContainer>
       <h2>To-Do List</h2>
       <ul>
         {todos.map((todo) => (
-          <li key={todo._id} className="todo-item">
-            <label className="todo-label">
+          <TodoItem key={todo._id}>
+            <label>
               {todo.text}
               <input
                 type="checkbox"
@@ -43,23 +69,25 @@ const TodoList: React.FC = () => {
                 onChange={(e) =>
                   handleUpdateTodo(todo._id, todo.text, e.target.checked)
                 }
-                className="todo-checkbox"
               />
             </label>
-          </li>
+            <TodoButton onClick={() => handleDeleteTodo(todo._id)}>
+              Delete
+            </TodoButton>
+          </TodoItem>
         ))}
-        <li className="todo-item">
-          <input
+        <TodoItem>
+          <TodoInput
             type="text"
             value={newTodoText}
             onChange={(e) => setNewTodoText(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Add a new task and press Enter"
-            className="todo-input"
           />
-        </li>
+          <TodoButton onClick={handleAddTodo}>Add</TodoButton>
+        </TodoItem>
       </ul>
-    </div>
+    </TodoListContainer>
   );
 };
 

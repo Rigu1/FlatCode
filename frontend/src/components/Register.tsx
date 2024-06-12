@@ -1,77 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '../app/store';
-import { registerUser } from '../app/authSlice';
-import { useNavigate, Link } from 'react-router-dom';
-
-const professions = ['Developer', 'Designer', 'Manager', 'Tester'];
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Register: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [profession, setProfession] = useState(professions[0]);
-  const { status, error } = useSelector((state: RootState) => state.auth);
+  const [profession, setProfession] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (status === 'succeeded') {
-      navigate('/');
-    }
-  }, [status, navigate]);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Register form submitted');
-    console.log('Username:', username);
-    console.log('Password:', password);
-    console.log('Profession:', profession);
-    dispatch(registerUser({ username, password, profession }));
+    try {
+      const response = await axios.post(
+        'http://localhost:5000/api/auth/register',
+        { username, password, profession },
+        { withCredentials: true },
+      );
+      if (response.data.message) {
+        navigate('/login');
+      } else {
+        setError(response.data.error);
+      }
+    } catch (err) {
+      setError('Registration failed. Please try again.');
+    }
   };
 
   return (
     <div>
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="profession">Profession:</label>
-          <select
-            id="profession"
-            value={profession}
-            onChange={(e) => setProfession(e.target.value)}
-          >
-            {professions.map((profession) => (
-              <option key={profession} value={profession}>
-                {profession}
-              </option>
-            ))}
-          </select>
-        </div>
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Username"
+          required
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+          required
+        />
+        <select
+          value={profession}
+          onChange={(e) => setProfession(e.target.value)}
+          required
+        >
+          <option value="" disabled>
+            Select your profession
+          </option>
+          <option value="Doctor">Doctor</option>
+          <option value="Engineer">Engineer</option>
+          <option value="Teacher">Teacher</option>
+          <option value="Artist">Artist</option>
+          <option value="Other">Other</option>
+        </select>
         <button type="submit">Register</button>
       </form>
-      {status === 'loading' && <p>Loading...</p>}
-      {status === 'failed' && <p>Error: {error}</p>}
-      <p>
-        Already have an account? <Link to="/">Login here</Link>
-      </p>
+      {error && <p>{error}</p>}
     </div>
   );
 };

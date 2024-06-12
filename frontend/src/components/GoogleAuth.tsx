@@ -25,17 +25,14 @@ const GoogleAuth: React.FC = () => {
       }
     };
 
-    const fetchEmailsOnLoad = async () => {
-      try {
-        await dispatch(fetchEmails());
-      } catch (error) {
-        console.error('Error fetching emails:', error);
-      }
-    };
-
     fetchAuthUrl();
-    fetchEmailsOnLoad();
-  }, [dispatch]);
+  }, []);
+
+  useEffect(() => {
+    if (!authUrl) {
+      dispatch(fetchEmails());
+    }
+  }, [authUrl, dispatch]);
 
   const handleEmailClick = async (id: string) => {
     try {
@@ -50,14 +47,19 @@ const GoogleAuth: React.FC = () => {
     }
   };
 
+  const handleBackClick = () => {
+    setSelectedEmail(null);
+  };
+
+  if (authUrl && !emails.length && !selectedEmail) {
+    return <a href={authUrl}>Authenticate with Google</a>;
+  }
+
   return (
     <div>
-      {authUrl && !emails.length && (
-        <a href={authUrl}>Authenticate with Google</a>
-      )}
       {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
-      {!loading && emails.length > 0 && !selectedEmail && (
+      {error && <p>Error: {error.toString()}</p>}
+      {!selectedEmail && emails.length > 0 && (
         <ul>
           {emails.map((email) => (
             <li key={email.id} onClick={() => handleEmailClick(email.id)}>
@@ -78,8 +80,10 @@ const GoogleAuth: React.FC = () => {
           <p>
             <strong>Date:</strong> {selectedEmail.date}
           </p>
-          <p>{selectedEmail.snippet}</p>
-          <button onClick={() => setSelectedEmail(null)}>Close</button>
+          <p>
+            <strong>Snippet:</strong> {selectedEmail.snippet}
+          </p>
+          <button onClick={handleBackClick}>Back to list</button>
         </div>
       )}
     </div>
