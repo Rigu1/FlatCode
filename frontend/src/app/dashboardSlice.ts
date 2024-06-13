@@ -1,3 +1,4 @@
+// src/slices/dashboardSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axiosInstance from '../utils/axiosConfig';
 

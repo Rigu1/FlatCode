@@ -1,3 +1,4 @@
+// src/components/Dashboard.tsx
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '@app/store';
@@ -5,29 +6,58 @@ import {
   fetchDashboards,
   addDashboard,
   deleteDashboard,
-  selectDashboard,
+  selectDashboard, // Ensure proper import
 } from '@app/dashboardSlice';
 import styled from 'styled-components';
+import ImageComponent from './common/ImageComponent';
+import ButtonComponent from './common/ButtonComponent';
 
 const Container = styled.div`
-  padding: 20px;
+  width: 200px;
 `;
 
-const DashboardItem = styled.div`
+const DashboardItem = styled.div<{ $isSelected: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 10px;
+  height: 40px;
+  margin: 1em 0;
+  padding: 1em;
+  border-radius: 7px;
   cursor: pointer;
+  background-color: ${(props) => (props.$isSelected ? '#222' : '#181818')};
+  position: relative;
 
   &:hover {
     background-color: #333;
+    transition: opacity 0.3s ease;
+
+    .delete-button {
+      opacity: 1;
+    }
+  }
+
+  .delete-button {
+    border-radius: 15px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+    img {
+      width: 1em;
+    }
   }
 `;
 
 const DashboardTitle = styled.div`
   flex-grow: 1;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  .dashboard-icon {
+    margin-right: 10px;
+  }
 `;
 
 const DashboardInput = styled.input`
@@ -35,19 +65,19 @@ const DashboardInput = styled.input`
   margin-right: 10px;
 `;
 
-const AddButton = styled.button`
+const AddButton = styled(ButtonComponent)`
   padding: 8px;
-`;
-
-const DeleteButton = styled.button`
-  padding: 8px;
-  margin-left: 10px;
+  background-color: #181818;
+  width: 100%;
 `;
 
 const Dashboard: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>(); // Typed dispatch
   const dashboards = useSelector(
     (state: RootState) => state.dashboards.dashboards,
+  );
+  const selectedDashboard = useSelector(
+    (state: RootState) => state.dashboards.selectedDashboard,
   );
   const [newTitle, setNewTitle] = useState('');
   const [isAdding, setIsAdding] = useState(false);
@@ -56,21 +86,28 @@ const Dashboard: React.FC = () => {
     dispatch(fetchDashboards());
   }, [dispatch]);
 
-  const handleAddDashboard = async () => {
+  useEffect(() => {
+    if (dashboards.length > 0 && !selectedDashboard) {
+      dispatch(selectDashboard(dashboards[0]._id));
+    }
+  }, [dashboards, selectedDashboard, dispatch]);
+
+  const handleAddDashboard = () => {
     if (newTitle.trim()) {
-      const action = await dispatch(addDashboard(newTitle));
+      if (dashboards.length >= 5) {
+        alert('You cannot add more than 5 dashboards.');
+        setIsAdding(false);
+        return;
+      }
+      dispatch(addDashboard(newTitle));
       setNewTitle('');
       setIsAdding(false);
-      if (action.payload && action.payload._id) {
-        dispatch(selectDashboard(action.payload._id));
-      }
     } else {
       setIsAdding(true);
     }
   };
 
-  const handleDeleteDashboard = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation(); // 클릭 이벤트 전파 중지
+  const handleDeleteDashboard = (id: string) => {
     dispatch(deleteDashboard(id));
   };
 
@@ -84,36 +121,62 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  // Create a copy of dashboards and sort it to bring selected dashboard to the top
+  const sortedDashboards = [...dashboards].sort((a, b) => {
+    if (a._id === selectedDashboard?._id) return -1;
+    if (b._id === selectedDashboard?._id) return 1;
+    return 0;
+  });
+
   return (
     <Container>
-      {dashboards.map((dashboard) => (
+      {sortedDashboards.map((dashboard, index) => (
         <DashboardItem
           key={dashboard._id}
+          $isSelected={dashboard._id === selectedDashboard?._id}
           onClick={() => handleSelectDashboard(dashboard._id)}
         >
-          <DashboardTitle>{dashboard.title}</DashboardTitle>
-          <DeleteButton
-            onClick={(e) => handleDeleteDashboard(dashboard._id, e)}
-          >
-            Delete
-          </DeleteButton>
+          <DashboardTitle>
+            <ImageComponent
+              src={`/images/dashboard_${index + 1}.svg`}
+              alt="dashboard icon"
+              className="dashboard-icon"
+            />
+            {dashboard.title}
+          </DashboardTitle>
+          <ButtonComponent
+            imageProps={{ src: '/images/close_icon.svg', alt: 'Delete' }}
+            text=""
+            onClick={() => handleDeleteDashboard(dashboard._id)}
+            className="delete-button"
+            size="small"
+          />
         </DashboardItem>
       ))}
       {isAdding && (
-        <DashboardItem>
+        <DashboardItem $isSelected={false}>
           <DashboardInput
             type="text"
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Enter new dashboard title"
+            placeholder="Enter new title"
             autoFocus
           />
-          <AddButton onClick={handleAddDashboard}>Add</AddButton>
         </DashboardItem>
       )}
       {!isAdding && (
-        <AddButton onClick={() => setIsAdding(true)}>Add Dashboard</AddButton>
+        <AddButton
+          onClick={() => setIsAdding(true)}
+          imageProps={{
+            src: '/images/add_icon.svg',
+            alt: 'add button',
+            className: 'dashboard-add-button',
+          }}
+          text=""
+          className="add-dashboard-button"
+          size="small"
+        />
       )}
     </Container>
   );
