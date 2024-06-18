@@ -133,3 +133,32 @@ export const updateBoardType = async (req, res) => {
     res.status(500).json({ message: 'Failed to update board type' });
   }
 };
+
+export const mergeBoardsInDashboard = async (req, res) => {
+  const { id } = req.params;
+  const { targetIndex, sourceIndex } = req.body;
+
+  try {
+    const dashboard = await Dashboard.findById(id);
+    if (!dashboard) {
+      return res.status(404).json({ error: 'Dashboard not found' });
+    }
+
+    if (dashboard.userId.toString() !== req.session.user.id) {
+      return res.status(403).json({ error: 'Not authorized' });
+    }
+
+    const sourceBoard = dashboard.boards[sourceIndex];
+    const targetBoard = dashboard.boards[targetIndex];
+
+    const mergedBoard = { ...targetBoard, type: sourceBoard.type, isMerged: true };
+    dashboard.boards[targetIndex] = mergedBoard;
+    dashboard.boards.splice(sourceIndex, 1);
+
+    await dashboard.save();
+    res.json(dashboard);
+  } catch (error) {
+    console.error('Error merging boards:', error);
+    res.status(500).json({ message: 'Failed to merge boards' });
+  }
+};

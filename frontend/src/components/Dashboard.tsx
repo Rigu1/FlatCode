@@ -1,4 +1,3 @@
-// src/components/Dashboard.tsx
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '@app/store';
@@ -6,7 +5,7 @@ import {
   fetchDashboards,
   addDashboard,
   deleteDashboard,
-  selectDashboard, // Ensure proper import
+  selectDashboard,
 } from '@app/dashboardSlice';
 import styled from 'styled-components';
 import ImageComponent from './common/ImageComponent';
@@ -14,6 +13,10 @@ import ButtonComponent from './common/ButtonComponent';
 
 const Container = styled.div`
   width: 200px;
+
+  .line {
+    border-top: solid 1px #666;
+  }
 `;
 
 const DashboardItem = styled.div<{ $isSelected: boolean }>`
@@ -41,7 +44,6 @@ const DashboardItem = styled.div<{ $isSelected: boolean }>`
   .delete-button {
     border-radius: 15px;
     opacity: 0;
-    transition: opacity 0.3s ease;
 
     img {
       width: 1em;
@@ -165,6 +167,7 @@ const Dashboard: React.FC = () => {
           />
         </DashboardItem>
       )}
+      <div className="line"></div>
       {!isAdding && (
         <AddButton
           onClick={() => setIsAdding(true)}

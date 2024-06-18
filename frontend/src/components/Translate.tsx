@@ -21,7 +21,6 @@ const Translate: React.FC = () => {
 
   return (
     <div>
-      <h2>Translate</h2>
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
@@ -30,7 +29,6 @@ const Translate: React.FC = () => {
       <br />
       <div>
         <label>
-          Language:
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}

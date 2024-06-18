@@ -1,9 +1,9 @@
-// src/slices/dashboardSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axiosInstance from '../utils/axiosConfig';
 
 interface Board {
   type: string;
+  isMerged?: boolean;
 }
 
 interface Dashboard {
@@ -91,6 +91,25 @@ export const updateBoardType = createAsyncThunk(
   },
 );
 
+export const mergeBoardsInDashboard = createAsyncThunk(
+  'dashboards/mergeBoardsInDashboard',
+  async ({
+    dashboardId,
+    targetIndex,
+    sourceIndex,
+  }: {
+    dashboardId: string;
+    targetIndex: number;
+    sourceIndex: number;
+  }) => {
+    const response = await axiosInstance.put(
+      `/dashboards/${dashboardId}/boards/merge`,
+      { targetIndex, sourceIndex },
+    );
+    return response.data;
+  },
+);
+
 const dashboardSlice = createSlice({
   name: 'dashboards',
   initialState,
@@ -143,6 +162,14 @@ const dashboardSlice = createSlice({
         }
       })
       .addCase(updateBoardType.fulfilled, (state, action) => {
+        if (
+          state.selectedDashboard &&
+          state.selectedDashboard._id === action.payload._id
+        ) {
+          state.selectedDashboard.boards = action.payload.boards;
+        }
+      })
+      .addCase(mergeBoardsInDashboard.fulfilled, (state, action) => {
         if (
           state.selectedDashboard &&
           state.selectedDashboard._id === action.payload._id

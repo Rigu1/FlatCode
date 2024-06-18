@@ -63,7 +63,7 @@ const GoogleAuth: React.FC = () => {
         <ul>
           {emails.map((email) => (
             <li key={email.id} onClick={() => handleEmailClick(email.id)}>
-              <strong>Subject:</strong> {email.subject} <br />
+              {email.subject} <br />
             </li>
           ))}
         </ul>

@@ -3,6 +3,8 @@ import Dashboard from '@components/Dashboard';
 import Board from '@components/Board';
 import ImageComponent from '@components/common/ImageComponent';
 import styled from 'styled-components';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 const StyledHomePage = styled.div`
   .container {
@@ -38,33 +40,35 @@ const StyledHomePage = styled.div`
       flex-direction: column;
       align-items: center;
       width: 100%;
+      padding: 20px;
     }
   }
 `;
 
 const HomePage: React.FC = () => {
   return (
-    <StyledHomePage>
-      <div className="container">
-        <nav>
-          <ImageComponent
-            src="/images/logo_dack.png"
-            alt="logo"
-            className="logo-img"
-          />
-          <div className="Dashboard">
-            <h4>Main</h4>
-            <Dashboard />
-          </div>
-        </nav>
-        <main>
-          <div className="main-head"></div>
-          <div className="main-content">
-            <Board />
-          </div>
-        </main>
-      </div>
-    </StyledHomePage>
+    <DndProvider backend={HTML5Backend}>
+      <StyledHomePage>
+        <div className="container">
+          <nav>
+            <ImageComponent
+              src="/images/logo_dack.png"
+              alt="logo"
+              className="logo-img"
+            />
+            <div className="Dashboard">
+              <h4>Dashboard</h4>
+              <Dashboard />
+            </div>
+          </nav>
+          <main>
+            <div className="main-content">
+              <Board />
+            </div>
+          </main>
+        </div>
+      </StyledHomePage>
+    </DndProvider>
   );
 };
 

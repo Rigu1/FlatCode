@@ -6,13 +6,17 @@ import styled from 'styled-components';
 
 const TodoListContainer = styled.div`
   padding: 20px;
+  label {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
 `;
 
 const TodoItem = styled.li`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px;
 `;
 
 const TodoInput = styled.input`

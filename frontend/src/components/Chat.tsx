@@ -26,7 +26,6 @@ const Chat: React.FC = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <h2>Chat with GPT-3</h2>
         <input
           type="text"
           placeholder="Ask a question..."
