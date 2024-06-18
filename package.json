@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "prettier": "^3.2.5"
+  },
+  "dependencies": {
+    "mongoose": "^8.4.1"
+  }
+}
